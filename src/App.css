@@ -1,0 +1,15 @@
+.guess-div {
+  margin-top: 100px;
+}
+
+.guess-label {
+  font-size: 1.2rem;
+}
+
+.guess-letters {
+  border: 1px solid grey;
+  font-size: 2rem;
+  font-weight: "bolder";
+  margin: 1rem;
+  padding: 1rem;
+}
