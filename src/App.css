@@ -1,15 +1,37 @@
-.guess-div {
-  margin-top: 100px;
-}
-
-.guess-label {
+.gameBoard {
+  display: flex;
+  justify-content: space-around;
   font-size: 1.2rem;
 }
 
+.userZone,
+.hangZone {
+  border: 2px solid grey;
+  margin: 2rem;
+  height: 50vh;
+  width: 45%;
+  padding: 2rem;
+}
+
+.userZone p {
+  display: inline;
+  letter-spacing: 0.1rem;
+}
+
+.userZone input {
+  width: 15%;
+  margin-left: 4rem;
+  /* outline: none; */
+}
+
 .guess-letters {
-  border: 1px solid grey;
+  /* border: 1px solid grey; */
   font-size: 2rem;
   font-weight: "bolder";
   margin: 1rem;
   padding: 1rem;
 }
+
+/* .hangZone {
+  background: url("img/hangman0.png");
+} */

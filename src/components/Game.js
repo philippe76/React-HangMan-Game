@@ -1,34 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import words from "../words";
+
 
 const Game = () => {
 
   const [good_letters, setGood_letters] = useState([]);
+  const [bad_letters, setBad_letters] = useState([]);
+
   
+  const picRef = useRef('0')
+
+  const hangman = {
+    background: `url(${require(`../img/hangman${picRef.current}.png`)}) center`
+  }
+
   const handleChange = (e) => {
+    
     const word_to_find = [...words[0]];
     const value = e.target.value.toUpperCase();
+
+    
+
+    // fill good or bad letters arrays
+    word_to_find.includes(value) ? 
     setGood_letters((previous) => {
       return [...previous, value];
-    });
+    }) :
+    setBad_letters((previous) => {
+      return [...previous, value];
+    })
 
 
-    document.querySelector("input").style.boxShadow = word_to_find.includes(
-      value
-    )
-      ? "0px 0px 4px green"
-      : "0px 0px 4px red";
+
+    // set red or green input outline depending on letter
+    document.querySelector("input").style.boxShadow = word_to_find.includes(value) ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
+
   };
 
+  console.log('bad : ' + bad_letters);
+  console.log('good : ' + good_letters);
+
+  // reset input field and color 400ms after keyup
   const resetInput = () => {
-    // resets the input's field 400ms after keyup
     setTimeout(() => (document.querySelector("input").value = ""), 400);
+    setTimeout(() => (document.querySelector("input").style.boxShadow = ""), 400);
   };
+
+
+  useEffect(()=>{
+    console.log(bad_letters.length);
+    // picRef.current++;
+    picRef.current = bad_letters.length;
+  },[bad_letters])
+
 
   return (
     <>
       <div className="mx-5 d-flex justify-content-around flex-wrap">
-        {/* {this.displayLetters()} */}
         {[...words[0]].map((item, index) => {
           return good_letters.includes(item) ? (
             <span key={index} className="guess-letters">
@@ -36,37 +64,33 @@ const Game = () => {
             </span>
           ) : (
             <span key={index} className="guess-letters">
-              _
+              ___
             </span>
           );
         })}
       </div>
       <div>
-        {/* {this.winnerDance()} */}
-        {/* {this.looserDance()} */}
       </div>
-      <div className="row">
-        <div className="col-6 guess-div">
-          <div className="row">
-            <label className="col-3 mt-5 pl-5 pt-1 guess-label">
-              Try a letter :{" "}
-            </label>
+      <section className="gameBoard">
+        <div className="userZone">
+            <p > TRY A LETTER :</p>
             <input
               type="text"
               autoFocus
-              className="form-control col-1 mt-5"
               maxLength="1"
               name="letter"
               onChange={handleChange}
               onKeyUp={resetInput}
-            />
-          </div>
-          <div className="row m-5">
-            {/* <Tries alreadyTried={this.state.alreadyTried} /> */}
-          </div>
+            />         
+            <div className="UsedLetters">
+              {/* <Tries alreadyTried={this.state.alreadyTried} /> */}
+            </div>  
         </div>
-        {/* <div style={hangman} id="hangman" className="col-5"></div> */}
-      </div>
+        <div className="hangZone" style={hangman} >
+          
+          {/* <div style={hangman} id="hangman" className="col-5"></div> */}
+        </div>
+      </section>
     </>
   );
 };
