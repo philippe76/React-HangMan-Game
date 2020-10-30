@@ -1,6 +1,7 @@
 import React from 'react';
 import bootstrap from 'bootstrap/dist/css/bootstrap.css'
-import User from './User'
+import './App.css'
+import Player from './Player'
 
 
 class App extends React.Component {
@@ -12,7 +13,7 @@ class App extends React.Component {
             <h1 className="display-4 text-center text-danger font-weight-normal">The HangMan Game</h1>
           </div>
           <div>            
-            <User />
+            <Player />
           </div>
         </>  
      );
