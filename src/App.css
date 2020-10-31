@@ -13,21 +13,36 @@
   padding: 2rem;
 }
 
-.userZone p {
-  display: inline;
-  letter-spacing: 0.1rem;
+.userZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.triedLetters {
+  margin-top: 5rem;
 }
 
 .userZone input {
   width: 15%;
-  margin-left: 4rem;
-  /* outline: none; */
 }
 
 .guess-letters {
   /* border: 1px solid grey; */
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: "bolder";
-  margin: 1rem;
-  padding: 1rem;
+  /* margin: 1rem;
+  padding: 1rem; */
+}
+
+@media screen and (max-width: 640px) {
+  .gameBoard {
+    flex-direction: column;
+  }
+
+  .userZone,
+  .hangZone {
+    width: 80%;
+    height: 40vh;
+  }
 }

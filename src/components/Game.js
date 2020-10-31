@@ -12,7 +12,7 @@ const Game = () => {
   // create ref for hangman background url
   const picRef = useRef('0')
   const hangman = {
-    background: `url(${require(`../img/hangman${picRef.current}.png`)}) center`
+    background: `url(${require(`../img/hangman${picRef.current}.png`)})  center`
   }
 
   // HANDLECHANGE METHOD //
@@ -68,8 +68,8 @@ const Game = () => {
       <div>
       </div>
       <section className="gameBoard">
-        <div className="userZone">
-            <p > TRY A LETTER :</p>
+        <div className="userZone">          
+            <p>TRY A LETTER :</p>
             <input
               type="text"
               autoFocus
@@ -77,10 +77,8 @@ const Game = () => {
               name="letter"
               onChange={handleChange}
               onKeyUp={resetInput}
-            />         
-            <div className="UsedLetters">
-              <Tries alreadyTried={bad_letters} />
-            </div>  
+            />                             
+            <Tries alreadyTried={bad_letters} />
         </div>
         <div className="hangZone" style={hangman}></div>
       </section>
