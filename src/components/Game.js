@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import words from "../words";
 
 
@@ -7,9 +7,8 @@ const Game = () => {
   const [good_letters, setGood_letters] = useState([]);
   const [bad_letters, setBad_letters] = useState([]);
 
-  
+  // update hangman background url
   const picRef = useRef('0')
-
   const hangman = {
     background: `url(${require(`../img/hangman${picRef.current}.png`)}) center`
   }
@@ -30,15 +29,17 @@ const Game = () => {
       return [...previous, value];
     })
 
-
+    if (!word_to_find.includes(value)) {
+      picRef.current = bad_letters.length+1;
+    }
+    
 
     // set red or green input outline depending on letter
     document.querySelector("input").style.boxShadow = word_to_find.includes(value) ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
 
   };
 
-  console.log('bad : ' + bad_letters);
-  console.log('good : ' + good_letters);
+
 
   // reset input field and color 400ms after keyup
   const resetInput = () => {
@@ -47,11 +48,6 @@ const Game = () => {
   };
 
 
-  useEffect(()=>{
-    console.log(bad_letters.length);
-    // picRef.current++;
-    picRef.current = bad_letters.length;
-  },[bad_letters])
 
 
   return (
