@@ -7,7 +7,13 @@ const Game = () => {
 
   const [good_letters, setGood_letters] = useState([]);
   const [bad_letters, setBad_letters] = useState([]);
+  const [word_index, setWord_index] = useState(0)
+  const [found_count, setFound_count] = useState(0)
 
+  const word_to_find = [...words[`${word_index}`]];
+  const word = words[`${word_index}`]
+
+  
 
   // create ref for hangman background url
   const picRef = useRef('0')
@@ -17,31 +23,36 @@ const Game = () => {
 
   // HANDLECHANGE METHOD //
   const handleChange = (e) => {
-    
-    const word_to_find = [...words[0]];
+        
     const current_letter = e.target.value.toUpperCase();    
+ 
+    const matching = word.match(new RegExp(`${current_letter}`, "g"));
 
-
-
-    // fill good or bad letters arrays
-    if(word_to_find.includes(current_letter) && !good_letters.includes(current_letter)) {
+    // fill good or bad letters arrays   // 
+    if(matching && !good_letters.includes(current_letter)){      
       setGood_letters((previous) => {
         return [...previous, current_letter];   
       })
+      setFound_count(found_count + matching.length )
+      
     }
-    if(!word_to_find.includes(current_letter) && !bad_letters.includes(current_letter)) {
+
+    if(!matching && !bad_letters.includes(current_letter)){    
       setBad_letters((previous) => {
         return [...previous, current_letter];   
       })
     }    
 
     // update hangman background url
-    picRef.current = !word_to_find.includes(current_letter) ? bad_letters.length+1 : picRef.current 
+    picRef.current = !matching ? bad_letters.length+1 : picRef.current 
     
     // set red or green input outline depending on letter
-    document.querySelector("input").style.boxShadow = word_to_find.includes(current_letter) ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
+    document.querySelector("input").style.boxShadow = matching ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
 
   };
+
+  console.log(found_count + '/' + word_to_find.length ); 
+
 
   // reset input field and color 400ms after keyup
   const resetInput = () => {
