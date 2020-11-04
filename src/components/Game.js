@@ -27,7 +27,7 @@ const Game = () => {
       setGood_letters([]);
       setBad_letters([]);
       setFound_count(0);
-      document.querySelectorAll('.guess-letters').forEach(item=> item.classList.remove('blink'));   
+      document.querySelectorAll('.letters').forEach(item=> item.classList.remove('blink'));   
       document.querySelector('.word').style.backgroundColor ='white'
   }
 
@@ -60,16 +60,13 @@ const Game = () => {
     
     // set red or green input outline depending on letter
     document.querySelector("input").style.boxShadow = matching ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
-
-    console.log(picRef.current);
-
   };
   // ------- end handleChange() -------------- //
 
 
   // when word is found
   if (found_count === word.length) {
-    document.querySelectorAll('.guess-letters').forEach(item=> item.classList.add('blink'));   
+    document.querySelectorAll('.letters').forEach(item=> item.classList.add('blink'));   
     document.querySelector('.word').style.backgroundColor ='#424a52';   
 
     // update logic game for a new word
@@ -80,11 +77,29 @@ const Game = () => {
 
   // remove hangman pic
   useEffect(()=>{
-    if(found_count === word.length) {
+    if(found_count === word.length || picRef.current === 8) {
       picRef.current = 0;
     }
   }, [word.length,found_count])
 
+
+  // loose game logic
+  if (picRef.current === 8) {
+    document.querySelector('.word').style.background = 'black';
+    document.querySelector('.word').style.color = '#dc3545';
+    document.querySelectorAll('.letters').forEach(item => {
+      item.style.display = 'none'
+    })
+    document.querySelector('.game-over').style.display = 'block'
+    setTimeout(() => {
+      reset();
+      document.querySelector('.game-over').style.display = 'none';
+      document.querySelector('.word').style.color = 'black';
+      document.querySelectorAll('.letters').forEach(item => {
+        item.style.display = 'inline'
+      })
+    }, 3000);  
+  }
 
   // reset input field and color 400ms after keyup
   const resetInput = () => {
@@ -92,17 +107,18 @@ const Game = () => {
     setTimeout(() => (document.querySelector("input").style.boxShadow = ""), 400);
   };
 
-
+  
   return (
     <>
       <div className="mx-5 d-flex justify-content-around flex-wrap word">   
-        {[...word].map((item, index) => {
+        <h1 className="game-over">GAME OVER</h1>
+         {[...word].map((item, index) => {
           return good_letters.includes(item) ? (
-            <span key={index} className="guess-letters">
+            <span key={index} className="letters">
               {item}
             </span>
           ) : (
-            <span key={index} className="guess-letters">
+            <span key={index} className="letters">
               ___
             </span>
           );

@@ -7,13 +7,13 @@ const App = () => {
   return (
     <>
       <div className="jumbotron bg-dark">
-        <h1 className="display-4 text-center text-danger font-weight-normal">
+        <h1 className="display-4 text-center text-white font-weight-normal">
           The HangMan Game
         </h1>
       </div>
-      {/* <div> */}
+
       <Game />
-      {/* </div> */}
+
     </>
   );
 };
