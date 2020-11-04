@@ -8,8 +8,8 @@ const Game = () => {
   // set logic game state
   const [good_letters, setGood_letters] = useState([]);
   const [bad_letters, setBad_letters] = useState([]);
-  const [word_index, setWord_index] = useState(0)
-  const [found_count, setFound_count] = useState(0)
+  const [word_index, setWord_index] = useState(0);
+  const [found_count, setFound_count] = useState(0);
 
   // import word to find
   const word = words[`${word_index}`]
@@ -45,6 +45,7 @@ const Game = () => {
 
     // update hangman background url
     picRef.current = !matching ? bad_letters.length+1 : picRef.current 
+
     
     // set red or green input outline depending on letter
     document.querySelector("input").style.boxShadow = matching ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
@@ -58,20 +59,23 @@ const Game = () => {
     document.querySelectorAll('.guess-letters').forEach(item=> item.classList.add('blink'));   
     document.querySelector('.word').style.backgroundColor ='#424a52';   
 
+    // update logic game for a new word
     setTimeout(() => {
       setWord_index(word_index+1);
       setGood_letters([]);
       setBad_letters([]);
       setFound_count(0);
-      picRef.current = 0;
       document.querySelectorAll('.guess-letters').forEach(item=> item.classList.remove('blink'));   
       document.querySelector('.word').style.backgroundColor ='white'
     }, 3000);  
   }
 
+  // remove hangman pic
   useEffect(()=>{
-    console.log(word);
-  }, [word,word_index])
+    if(found_count === word.length) {
+      picRef.current = 0;
+    }
+  }, [word.length,found_count])
 
 
   // reset input field and color 400ms after keyup

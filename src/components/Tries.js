@@ -8,7 +8,7 @@ const Tries = (props) => {
         <div className="triedLetters">
         {/* <p>Tried Letters:</p> */}
             {props.alreadyTried.map((item, index) => {
-                return  <span key={index} className="guess-letters">    
+                return  <span key={index} >    
                             {item.toUpperCase()} - 
                         </span>   
             })}            
