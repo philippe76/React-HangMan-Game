@@ -1,11 +1,27 @@
+/* WORD ZONE */
+
+.word {
+  padding: 3rem;
+  font-size: 2rem;
+  font-weight: "bolder";
+}
+
 .blink {
   color: deeppink;
+  /* color: #424a52; */
+  font-size: 2.5rem;
   animation: blinker 1s linear infinite;
 }
 
 @keyframes blinker {
   50% {
     opacity: 0;
+  }
+  75% {
+    color: green;
+  }
+  100% {
+    color: yellow;
   }
 }
 
@@ -36,14 +52,6 @@
 
 .userZone input {
   width: 15%;
-}
-
-.guess-letters {
-  /* border: 1px solid grey; */
-  font-size: 1.5rem;
-  font-weight: "bolder";
-  /* margin: 1rem;
-  padding: 1rem; */
 }
 
 @media screen and (max-width: 640px) {

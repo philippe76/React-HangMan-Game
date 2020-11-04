@@ -52,7 +52,9 @@ const Game = () => {
 
   console.log(found_count + '/' + word.length ); 
   if (found_count === word.length) {
-    document.querySelectorAll('.guess-letters').forEach(item=> item.classList.add('blink'))    
+    document.querySelectorAll('.guess-letters').forEach(item=> item.classList.add('blink'));
+    // document.querySelector('.word').style.backgroundColor ='#343a40';    
+    document.querySelector('.word').style.backgroundColor ='#424a52';    
   }
 
 
@@ -65,7 +67,7 @@ const Game = () => {
 
   return (
     <>
-      <div className="mx-5 d-flex justify-content-around flex-wrap">
+      <div className="mx-5 d-flex justify-content-around flex-wrap word">
         {[...words[0]].map((item, index) => {
           return good_letters.includes(item) ? (
             <span key={index} className="guess-letters">
