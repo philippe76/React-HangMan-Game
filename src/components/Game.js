@@ -5,15 +5,14 @@ import Tries from './Tries'
 
 const Game = () => {
 
+  // set logic game state
   const [good_letters, setGood_letters] = useState([]);
   const [bad_letters, setBad_letters] = useState([]);
   const [word_index, setWord_index] = useState(0)
   const [found_count, setFound_count] = useState(0)
 
-  const word_to_find = [...words[`${word_index}`]];
+  // import word to find
   const word = words[`${word_index}`]
-
-  
 
   // create ref for hangman background url
   const picRef = useRef('0')
@@ -21,14 +20,15 @@ const Game = () => {
     background: `url(${require(`../img/hangman${picRef.current}.png`)})  center`
   }
 
-  // HANDLECHANGE METHOD //
+
+  // ------- HANDLECHANGE METHOD -------------- //
   const handleChange = (e) => {
      
     // find matching letters
     const current_letter = e.target.value.toUpperCase();     
     const matching = word.match(new RegExp(`${current_letter}`, "g"));
 
-    // fill good or bad letters arrays    
+    // update good_letters array & found_count
     if(matching && !good_letters.includes(current_letter)){      
       setGood_letters((previous) => {
         return [...previous, current_letter];   
@@ -36,6 +36,7 @@ const Game = () => {
       setFound_count(found_count + matching.length )      
     }
 
+     // update bad letters array 
     if(!matching && !bad_letters.includes(current_letter)){    
       setBad_letters((previous) => {
         return [...previous, current_letter];   
@@ -49,12 +50,15 @@ const Game = () => {
     document.querySelector("input").style.boxShadow = matching ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
 
   };
+  // ------- end handleChange() -------------- //
 
+
+  // when word is found
   console.log(found_count + '/' + word.length ); 
   if (found_count === word.length) {
-    document.querySelectorAll('.guess-letters').forEach(item=> item.classList.add('blink'));
-    // document.querySelector('.word').style.backgroundColor ='#343a40';    
-    document.querySelector('.word').style.backgroundColor ='#424a52';    
+    document.querySelectorAll('.guess-letters').forEach(item=> item.classList.add('blink'));   
+    document.querySelector('.word').style.backgroundColor ='#424a52';   
+    // document.querySelector('.word').style.backgroundColor ='#343a40';  
   }
 
 
@@ -67,7 +71,7 @@ const Game = () => {
 
   return (
     <>
-      <div className="mx-5 d-flex justify-content-around flex-wrap word">
+      <div className="mx-5 d-flex justify-content-around flex-wrap word">   
         {[...words[0]].map((item, index) => {
           return good_letters.includes(item) ? (
             <span key={index} className="guess-letters">
