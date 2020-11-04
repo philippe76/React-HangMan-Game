@@ -23,18 +23,17 @@ const Game = () => {
 
   // HANDLECHANGE METHOD //
   const handleChange = (e) => {
-        
-    const current_letter = e.target.value.toUpperCase();    
- 
+     
+    // find matching letters
+    const current_letter = e.target.value.toUpperCase();     
     const matching = word.match(new RegExp(`${current_letter}`, "g"));
 
-    // fill good or bad letters arrays   // 
+    // fill good or bad letters arrays    
     if(matching && !good_letters.includes(current_letter)){      
       setGood_letters((previous) => {
         return [...previous, current_letter];   
       })
-      setFound_count(found_count + matching.length )
-      
+      setFound_count(found_count + matching.length )      
     }
 
     if(!matching && !bad_letters.includes(current_letter)){    
@@ -51,7 +50,10 @@ const Game = () => {
 
   };
 
-  console.log(found_count + '/' + word_to_find.length ); 
+  console.log(found_count + '/' + word.length ); 
+  if (found_count === word.length) {
+    document.querySelectorAll('.guess-letters').forEach(item=> item.classList.add('blink'))    
+  }
 
 
   // reset input field and color 400ms after keyup

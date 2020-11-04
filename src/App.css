@@ -1,3 +1,14 @@
+.blink {
+  color: deeppink;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
 .gameBoard {
   display: flex;
   justify-content: space-around;
