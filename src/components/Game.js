@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import words from "../words";
 import Tries from './Tries'
 
@@ -54,12 +54,24 @@ const Game = () => {
 
 
   // when word is found
-  console.log(found_count + '/' + word.length ); 
   if (found_count === word.length) {
     document.querySelectorAll('.guess-letters').forEach(item=> item.classList.add('blink'));   
     document.querySelector('.word').style.backgroundColor ='#424a52';   
-    // document.querySelector('.word').style.backgroundColor ='#343a40';  
+
+    setTimeout(() => {
+      setWord_index(word_index+1);
+      setGood_letters([]);
+      setBad_letters([]);
+      setFound_count(0);
+      picRef.current = 0;
+      document.querySelectorAll('.guess-letters').forEach(item=> item.classList.remove('blink'));   
+      document.querySelector('.word').style.backgroundColor ='white'
+    }, 3000);  
   }
+
+  useEffect(()=>{
+    console.log(word);
+  }, [word,word_index])
 
 
   // reset input field and color 400ms after keyup
@@ -72,7 +84,7 @@ const Game = () => {
   return (
     <>
       <div className="mx-5 d-flex justify-content-around flex-wrap word">   
-        {[...words[0]].map((item, index) => {
+        {[...word].map((item, index) => {
           return good_letters.includes(item) ? (
             <span key={index} className="guess-letters">
               {item}
