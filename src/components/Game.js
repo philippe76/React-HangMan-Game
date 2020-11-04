@@ -21,6 +21,17 @@ const Game = () => {
   }
 
 
+  // function to reset game 
+  const reset = () => {
+    setWord_index(word_index+1);
+      setGood_letters([]);
+      setBad_letters([]);
+      setFound_count(0);
+      document.querySelectorAll('.guess-letters').forEach(item=> item.classList.remove('blink'));   
+      document.querySelector('.word').style.backgroundColor ='white'
+  }
+
+
   // ------- HANDLECHANGE METHOD -------------- //
   const handleChange = (e) => {
      
@@ -50,6 +61,8 @@ const Game = () => {
     // set red or green input outline depending on letter
     document.querySelector("input").style.boxShadow = matching ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
 
+    console.log(picRef.current);
+
   };
   // ------- end handleChange() -------------- //
 
@@ -61,12 +74,7 @@ const Game = () => {
 
     // update logic game for a new word
     setTimeout(() => {
-      setWord_index(word_index+1);
-      setGood_letters([]);
-      setBad_letters([]);
-      setFound_count(0);
-      document.querySelectorAll('.guess-letters').forEach(item=> item.classList.remove('blink'));   
-      document.querySelector('.word').style.backgroundColor ='white'
+      reset();
     }, 3000);  
   }
 
