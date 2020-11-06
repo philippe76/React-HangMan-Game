@@ -66,7 +66,7 @@ const Game = () => {
 
   // when word is found
   if (found_count === word.length) {
-    document.querySelectorAll('.letters').forEach(item=> item.classList.add('blink'));   
+    document.querySelectorAll('.letters').forEach(item=> item.classList.add('blink'));       
     document.querySelector('.word').style.backgroundColor ='#424a52';   
 
     // update logic game for a new word
