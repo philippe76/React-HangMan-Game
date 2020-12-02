@@ -161,7 +161,8 @@ class Game extends Component {
 
     const letterCount = [];
 
-    [...this.state.words[0]].map((item) => {
+    // eslint-disable-next-line array-callback-return
+    [...this.state.words[0]].map((item)=> {
       if (this.state.goodletter.includes(item)) {
         letterCount.push(1);
       }

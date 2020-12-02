@@ -23,12 +23,28 @@ const Game = () => {
 
   // function to reset game 
   const reset = () => {
-    setWord_index(word_index+1);
-      setGood_letters([]);
-      setBad_letters([]);
-      setFound_count(0);
-      document.querySelectorAll('.letters').forEach(item=> item.classList.remove('blink'));   
-      document.querySelector('.word').style.backgroundColor ='white'
+    // if (word_index !== 0){
+    //   setWord_index(word_index+1);
+    // }
+    // else {
+    //   setWord_index(0)
+    // }
+    if (word_index !== words.length-1) {
+      setWord_index(word_index+1);
+    }
+    else {
+      setWord_index(0)
+    }
+
+
+    // console.log(word_index);
+    // setWord_index(word_index+1);
+    
+    setGood_letters([]);
+    setBad_letters([]);
+    setFound_count(0);
+    document.querySelectorAll('.letters').forEach(item=> item.classList.remove('blink'));   
+    document.querySelector('.word').style.backgroundColor ='white'
   }
 
 

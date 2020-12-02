@@ -1,17 +1,11 @@
 const words = [
-  "ANIMAL",
-  "LOUP",
-  "AISHA",
-  "ECOLE",
-  "ALPHABETIQUE",
-  "MAGNESIUM",
-  "STUPEFACTION",
-  "CONTINENT",
-  "MAYONNAISE",
-  "LANOUGADERE",
+  "PROGRAMMING",
   "JAVASCRIPT",
+  "ALPHABETICAL",
   "BOOTSTRAP",
-  "INTELLIGENCE",
+  "MAGNESIUM",
+  "ALGORITHM",
+  "NETWORKING"
 ];
 
 export default words;
