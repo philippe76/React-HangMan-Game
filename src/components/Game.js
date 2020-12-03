@@ -10,9 +10,10 @@ const Game = () => {
   const [word_index, setWord_index] = useState(0);
   const [found_count, setFound_count] = useState(0);
   const [game_over, setGame_over] = useState(false);
+  const [word, setWord] = useState(words[`${word_index}`])
 
   // IMPORT WORD TO FIND
-  const word = words[`${word_index}`]
+  // let word = words[`${word_index}`]
 
   // CREATE REF FOR HANGMAN PICS
   const picRef = useRef('0')
@@ -28,7 +29,19 @@ const Game = () => {
       setWord_index(word_index+1);
     }
     else {
-      setWord_index(0)
+      // setWord_index(0)
+
+      // fetching new word
+      let URL = 'https://random-word-api.herokuapp.com/word?number=10'
+
+      const fetchWord = async() =>{
+        return (await fetch(URL)).json();
+      }
+      const getWord = () => {
+        fetchWord().then( result => setWord(result[0].toUpperCase()))
+      }
+      getWord();
+      
     }
    
     setGood_letters([]);
