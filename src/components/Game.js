@@ -5,46 +5,39 @@ import Tries from './Tries'
 
 const Game = () => {
 
-  // set logic game state
   const [good_letters, setGood_letters] = useState([]);
   const [bad_letters, setBad_letters] = useState([]);
   const [word_index, setWord_index] = useState(0);
   const [found_count, setFound_count] = useState(0);
+  const [game_over, setGame_over] = useState(false);
 
-  // import word to find
+  // IMPORT WORD TO FIND
   const word = words[`${word_index}`]
 
-  // create ref for hangman background url
+  // CREATE REF FOR HANGMAN PICS
   const picRef = useRef('0')
   const hangman = {
     background: `url(${require(`../img/hangman${picRef.current}.png`)})  center`
   }
 
 
-  // function to reset game 
+  // RESET GAME FUNCTION
   const reset = () => {
-    // if (word_index !== 0){
-    //   setWord_index(word_index+1);
-    // }
-    // else {
-    //   setWord_index(0)
-    // }
+    // if last word : go back to first one
     if (word_index !== words.length-1) {
       setWord_index(word_index+1);
     }
     else {
       setWord_index(0)
     }
-
-
-    // console.log(word_index);
-    // setWord_index(word_index+1);
-    
+   
     setGood_letters([]);
     setBad_letters([]);
     setFound_count(0);
     document.querySelectorAll('.letters').forEach(item=> item.classList.remove('blink'));   
-    document.querySelector('.word').style.backgroundColor ='white'
+    document.querySelector('.word').style.backgroundColor ='white';
+    document.querySelector('.word').style.color ='black';
+
   }
 
 
@@ -74,16 +67,17 @@ const Game = () => {
     picRef.current = !matching ? bad_letters.length+1 : picRef.current 
 
     
-    // set red or green input outline depending on letter
+    // set 'red' or 'green' input outline depending on letter
     document.querySelector("input").style.boxShadow = matching ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
   };
-  // ------- end handleChange() -------------- //
 
 
-  // when word is found
-  if (found_count === word.length) {
+
+
+  // WHEN WORD IS FOUND
+  if (found_count === word.length && game_over === false) {
     document.querySelectorAll('.letters').forEach(item=> item.classList.add('blink'));       
-    document.querySelector('.word').style.backgroundColor ='#424a52';   
+    document.querySelector('.word').style.backgroundColor ='#424a52'; 
 
     // update logic game for a new word
     setTimeout(() => {
@@ -91,39 +85,61 @@ const Game = () => {
     }, 3000);  
   }
 
-  // remove hangman pic
+
+  // REMOVE HANGMAN PIC
   useEffect(()=>{
-    if(found_count === word.length || picRef.current === 8) {
+    if((found_count === word.length && game_over === false) || picRef.current === 8) {
       picRef.current = 0;
     }
-  }, [word.length,found_count])
+  }, [word.length,found_count, game_over])
 
 
-  // loose game logic
-  if (picRef.current === 8) {
-    document.querySelector('.word').style.background = 'black';
-    document.querySelector('.word').style.color = '#dc3545';
-    document.querySelectorAll('.letters').forEach(item => {
-      item.style.display = 'none'
-    })
-    document.querySelector('.game-over').style.display = 'block'
-    setTimeout(() => {
-      reset();
-      document.querySelector('.game-over').style.display = 'none';
-      document.querySelector('.word').style.color = 'black';
+
+  // ------- LOSING GAME LOGIC -------------- //
+  if (picRef.current === 8) {  
+
+    // display unfound word
+    const letters = [...document.querySelectorAll('.letters')];
+    for (let i=0; i<letters.length; i++){
+      letters[i].style.display = 'inline'
+      letters[i].innerHTML = word[i];
+    }
+
+    // display Game Over
+    setTimeout(() => {   
+      setGame_over(!game_over);       
+      document.querySelector('.word').style.background = 'black';
+      document.querySelector('.word').style.color = '#dc3545';   
       document.querySelectorAll('.letters').forEach(item => {
-        item.style.display = 'inline'
+        item.innerHTML = ''
+        item.style.display = 'none'
       })
-    }, 3000);  
+      document.querySelector('.game-over').style.display = 'block'
+      
+    },1000)
+
+    // reset game board for next word 
+    setTimeout(() => {
+      document.querySelector('.game-over').style.display = 'none';
+      setGame_over(false);           
+      reset(); 
+      document.querySelectorAll('.letters').forEach(item => {
+        item.style.display = 'inline';
+        item.innerHTML = '_'
+      })  
+    }, 2500);      
   }
 
-  // reset input field and color 400ms after keyup
+
+
+  // RESEST INPUT AFTER KEYUP
   const resetInput = () => {
     setTimeout(() => (document.querySelector("input").value = ""), 400);
     setTimeout(() => (document.querySelector("input").style.boxShadow = ""), 400);
   };
 
-  
+
+  // ------- COMPONENT RETURN -------------- //
   return (
     <>
       <div className="mx-5 d-flex justify-content-around flex-wrap word">   

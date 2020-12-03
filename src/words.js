@@ -1,4 +1,5 @@
 const words = [
+  "HANGMAN",
   "PROGRAMMING",
   "JAVASCRIPT",
   "ALPHABETICAL",
