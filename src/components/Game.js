@@ -5,15 +5,14 @@ import Tries from './Tries'
 
 const Game = () => {
 
-  const [good_letters, setGood_letters] = useState([]);
-  const [bad_letters, setBad_letters] = useState([]);
-  const [word_index, setWord_index] = useState(0);
-  const [found_count, setFound_count] = useState(0);
-  const [game_over, setGame_over] = useState(false);
-  const [word, setWord] = useState(words[`${word_index}`])
-
-  // IMPORT WORD TO FIND
-  // let word = words[`${word_index}`]
+  const [wordData, setwordData] = useState({
+    good_letters: [],
+    bad_letters: [],
+    word: words[0],
+    word_index: 0,
+    found_count: 0,
+    game_over: false
+  })
 
   // CREATE REF FOR HANGMAN PICS
   const picRef = useRef('0')
@@ -25,32 +24,44 @@ const Game = () => {
   // RESET GAME FUNCTION
   const reset = () => {
     // if last word : go back to first one
-    if (word_index !== words.length-1) {
-      setWord_index(word_index+1);
+    if (wordData.word_index !== words.length-1) {
+
+      setwordData(prevState => ({
+        ...prevState,
+        word_index: wordData.word_index+1,
+        word: words[wordData.word_index+1]
+      }))
     }
     else {
-      // setWord_index(0)
+
+      setwordData(prevState => ({
+        ...prevState,
+        word_index: 0
+      }))
 
       // fetching new word
-      let URL = 'https://random-word-api.herokuapp.com/word?number=10'
+      // let URL = 'https://random-word-api.herokuapp.com/word?number=10'
 
-      const fetchWord = async() =>{
-        return (await fetch(URL)).json();
-      }
-      const getWord = () => {
-        fetchWord().then( result => setWord(result[0].toUpperCase()))
-      }
-      getWord();
+      // const fetchWord = async() =>{
+      //   return (await fetch(URL)).json();
+      // }
+      // const getWord = () => {
+      //   fetchWord().then( result => setWord(result[0].toUpperCase()))
+      // }
+      // getWord();
       
     }
    
-    setGood_letters([]);
-    setBad_letters([]);
-    setFound_count(0);
+    setwordData(prevState => ({
+      ...prevState,
+      good_letters: [],
+      bad_letters: [],
+      found_count:0
+    }))
+
     document.querySelectorAll('.letters').forEach(item=> item.classList.remove('blink'));   
     document.querySelector('.word').style.backgroundColor ='white';
     document.querySelector('.word').style.color ='black';
-
   }
 
 
@@ -59,25 +70,30 @@ const Game = () => {
      
     // find matching letters
     const current_letter = e.target.value.toUpperCase();     
-    const matching = word.match(new RegExp(`${current_letter}`, "g"));
+    const matching = wordData.word.match(new RegExp(`${current_letter}`, "g"));
 
     // update good_letters array & found_count
-    if(matching && !good_letters.includes(current_letter)){      
-      setGood_letters((previous) => {
-        return [...previous, current_letter];   
-      })
-      setFound_count(found_count + matching.length )      
+    if(matching && !wordData.good_letters.includes(current_letter)){      
+      setwordData((prevState) => ({
+        ...prevState, 
+        good_letters: [...wordData.good_letters , current_letter]   
+      }))
+      setwordData(prevState => ({
+        ...prevState,
+        found_count: wordData.found_count + matching.length
+      })) 
     }
 
      // update bad letters array 
-    if(!matching && !bad_letters.includes(current_letter)){    
-      setBad_letters((previous) => {
-        return [...previous, current_letter];   
-      })
+    if(!matching && !wordData.bad_letters.includes(current_letter)){    
+      setwordData((prevState) => ({
+        ...prevState, 
+        bad_letters: [...wordData.bad_letters , current_letter]   
+      }))
     }    
 
     // update hangman background url
-    picRef.current = !matching ? bad_letters.length+1 : picRef.current 
+    picRef.current = !matching ? wordData.bad_letters.length+1 : picRef.current 
 
     
     // set 'red' or 'green' input outline depending on letter
@@ -88,7 +104,7 @@ const Game = () => {
 
 
   // WHEN WORD IS FOUND
-  if (found_count === word.length && game_over === false) {
+  if (wordData.found_count === wordData.word.length && wordData.game_over === false) {
     document.querySelectorAll('.letters').forEach(item=> item.classList.add('blink'));       
     document.querySelector('.word').style.backgroundColor ='#424a52'; 
 
@@ -101,10 +117,10 @@ const Game = () => {
 
   // REMOVE HANGMAN PIC
   useEffect(()=>{
-    if((found_count === word.length && game_over === false) || picRef.current === 8) {
+    if((wordData.found_count === wordData.word.length && wordData.game_over === false) || picRef.current === 8) {
       picRef.current = 0;
     }
-  }, [word.length,found_count, game_over])
+  }, [wordData.word.length,wordData.found_count, wordData.game_over])
 
 
 
@@ -115,12 +131,16 @@ const Game = () => {
     const letters = [...document.querySelectorAll('.letters')];
     for (let i=0; i<letters.length; i++){
       letters[i].style.display = 'inline'
-      letters[i].innerHTML = word[i];
+      letters[i].innerHTML = wordData.word[i];
     }
 
     // display Game Over
     setTimeout(() => {   
-      setGame_over(!game_over);       
+
+      setwordData(prevState => ({
+        ...prevState,
+        game_over: !wordData.game_over
+      }))      
       document.querySelector('.word').style.background = 'black';
       document.querySelector('.word').style.color = '#dc3545';   
       document.querySelectorAll('.letters').forEach(item => {
@@ -134,7 +154,11 @@ const Game = () => {
     // reset game board for next word 
     setTimeout(() => {
       document.querySelector('.game-over').style.display = 'none';
-      setGame_over(false);           
+
+      setwordData(prevState => ({
+        ...prevState,
+        game_over: false
+      }))         
       reset(); 
       document.querySelectorAll('.letters').forEach(item => {
         item.style.display = 'inline';
@@ -157,8 +181,8 @@ const Game = () => {
     <>
       <div className="mx-5 d-flex justify-content-around flex-wrap word">   
         <h1 className="game-over">GAME OVER</h1>
-         {[...word].map((item, index) => {
-          return good_letters.includes(item) ? (
+         {[...wordData.word].map((item, index) => {
+          return wordData.good_letters.includes(item) ? (
             <span key={index} className="letters">
               {item}
             </span>
@@ -182,7 +206,7 @@ const Game = () => {
               onChange={handleChange}
               onKeyUp={resetInput}
             />                             
-            <Tries alreadyTried={bad_letters} />
+            <Tries alreadyTried={wordData.bad_letters} />
         </div>
         <div className="hangZone" style={hangman}></div>
       </section>
