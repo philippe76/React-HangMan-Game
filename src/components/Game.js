@@ -23,35 +23,24 @@ const Game = () => {
 
   // RESET GAME FUNCTION
   const reset = () => {
-    // if last word : go back to first one
-    if (wordData.word_index !== words.length-1) {
 
-      setwordData(prevState => ({
-        ...prevState,
-        word_index: wordData.word_index+1,
-        word: words[wordData.word_index+1]
-      }))
+    // fetching new word
+    let URL = 'https://random-word-api.herokuapp.com/word?number=10&swear=1'
+
+    const fetchWord = async() =>{
+      return (await fetch(URL)).json();
     }
-    else {
-
-      setwordData(prevState => ({
-        ...prevState,
-        word_index: 0
-      }))
-
-      // fetching new word
-      // let URL = 'https://random-word-api.herokuapp.com/word?number=10'
-
-      // const fetchWord = async() =>{
-      //   return (await fetch(URL)).json();
-      // }
-      // const getWord = () => {
-      //   fetchWord().then( result => setWord(result[0].toUpperCase()))
-      // }
-      // getWord();
+    const getWord = () => {
+      fetchWord().then( result => {
+        setwordData(prevState => ({
+          ...prevState,
+          word: result[0].toUpperCase()
+        }))
+      })
+    }
+    getWord();
       
-    }
-   
+    // reset state bindings
     setwordData(prevState => ({
       ...prevState,
       good_letters: [],
@@ -95,15 +84,13 @@ const Game = () => {
     // update hangman background url
     picRef.current = !matching ? wordData.bad_letters.length+1 : picRef.current 
 
-    
     // set 'red' or 'green' input outline depending on letter
     document.querySelector("input").style.boxShadow = matching ? "0px 0px 2px 2px green" : "0px 0px 2px 2px red";
   };
 
 
 
-
-  // WHEN WORD IS FOUND
+  // SUCCESS LOGIC
   if (wordData.found_count === wordData.word.length && wordData.game_over === false) {
     document.querySelectorAll('.letters').forEach(item=> item.classList.add('blink'));       
     document.querySelector('.word').style.backgroundColor ='#424a52'; 
