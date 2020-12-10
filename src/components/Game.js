@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import words from "../words";
-import Tries from './Tries'
+import Tries from './Tries';
+import randomWords from 'random-words';
 
 
 const Game = () => {
@@ -25,20 +26,25 @@ const Game = () => {
   const reset = () => {
 
     // fetching new word
-    let URL = 'https://random-word-api.herokuapp.com/word?number=10&swear=1'
+    setwordData(prevState => ({
+      ...prevState,
+      word: randomWords().toUpperCase()
+    }))
 
-    const fetchWord = async() =>{
-      return (await fetch(URL)).json();
-    }
-    const getWord = () => {
-      fetchWord().then( result => {
-        setwordData(prevState => ({
-          ...prevState,
-          word: result[0].toUpperCase()
-        }))
-      })
-    }
-    getWord();
+    // let URL = 'https://random-word-api.herokuapp.com/word?number=10&swear=1'
+
+    // const fetchWord = async() =>{
+    //   return (await fetch(URL)).json();
+    // }
+    // const getWord = () => {
+    //   fetchWord().then( result => {
+    //     setwordData(prevState => ({
+    //       ...prevState,
+    //       word: result[0].toUpperCase()
+    //     }))
+    //   })
+    // }
+    // getWord();  
       
     // reset state bindings
     setwordData(prevState => ({
